@@ -38,6 +38,10 @@ public class Application {
 
 	private JFrame frame;
 	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
 
 	/**
 	 * Launch the application.
@@ -67,7 +71,7 @@ public class Application {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 461, 627);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel header = new JPanel();
@@ -174,6 +178,110 @@ public class Application {
 		
 		JPanel administrationPanel = new JPanel();
 		tabbedPane.addTab("Administration", null, administrationPanel, null);
+		administrationPanel.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel = new JPanel();
+		administrationPanel.add(panel);
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.DEFAULT_COLSPEC,
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("default:grow"),
+				FormSpecs.DEFAULT_ROWSPEC,}));
+		
+		JLabel lblAddABook = new JLabel("Add a Book");
+		lblAddABook.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(lblAddABook, "1, 1, 2, 1");
+		
+		JLabel lblBookName = new JLabel("Book name");
+		panel.add(lblBookName, "1, 3, right, default");
+		
+		textField_1 = new JTextField();
+		panel.add(textField_1, "2, 3, fill, default");
+		textField_1.setColumns(10);
+		
+		JLabel lblAuthorName = new JLabel("Author name");
+		panel.add(lblAuthorName, "1, 5, right, default");
+		
+		textField_2 = new JTextField();
+		panel.add(textField_2, "2, 5, fill, default");
+		textField_2.setColumns(10);
+		
+		JLabel lblPublisherName = new JLabel("Publisher name");
+		panel.add(lblPublisherName, "1, 7, right, default");
+		
+		textField_3 = new JTextField();
+		panel.add(textField_3, "2, 7, fill, default");
+		textField_3.setColumns(10);
+		
+		JButton btnNewButton_2 = new JButton("Submit book to the database");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		panel.add(btnNewButton_2, "1, 9, 2, 1");
+		
+		JLabel lblSearchForA = new JLabel("Search for a book");
+		lblSearchForA.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(lblSearchForA, "1, 11, 2, 1");
+		
+		JLabel lblBookTitle = new JLabel("Book title");
+		panel.add(lblBookTitle, "1, 13, right, default");
+		
+		textField_4 = new JTextField();
+		panel.add(textField_4, "2, 13, fill, default");
+		textField_4.setColumns(10);
+		
+		JButton btnNewButton_3 = new JButton("Search");
+		panel.add(btnNewButton_3, "1, 15, 2, 1");
+		
+		JLabel lblNewLabel = new JLabel("Add a book copy to this branch");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setVerticalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setEnabled(true);
+		panel.add(lblNewLabel, "1, 17, 2, 1");
+		
+		JLabel lblSelectABook = new JLabel("Select a book");
+		lblSelectABook.setHorizontalAlignment(SwingConstants.TRAILING);
+		panel.add(lblSelectABook, "1, 19, right, default");
+		
+		JComboBox comboBox_2 = new JComboBox();
+		panel.add(comboBox_2, "2, 19, fill, default");
+		
+		JButton btnAddACopy = new JButton("Add a copy to this branch");
+		panel.add(btnAddACopy, "1, 21, 2, 1");
+		
+		JLabel lblBranchInformation = new JLabel("Branch Information");
+		lblBranchInformation.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(lblBranchInformation, "1, 23, 2, 1");
+		
+		JTextArea textArea_1 = new JTextArea();
+		textArea_1.setEditable(false);
+		panel.add(textArea_1, "1, 25, 2, 1, fill, fill");
 	}
 
 }
