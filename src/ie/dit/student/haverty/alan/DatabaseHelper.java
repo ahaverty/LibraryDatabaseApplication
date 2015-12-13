@@ -1,26 +1,36 @@
 package ie.dit.student.haverty.alan;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DatabaseHelper {
 
-	private String servername;
-	private String username;
-	private String password;
-	private String portnumber;
-	private String url;
-
-	public DatabaseHelper(String servername, String user, String pass, String portnumber) {
-		this.servername = servername;
-		this.username = user;
-		this.password = pass;
-		this.portnumber = portnumber;
-		init();
-	}
-
-	private void init() {
+	public static Connection getConnection() throws SQLException {
+		Properties prop = new Properties();
+		InputStream inStream = null;
+		try {
+			String propertiesPath = System.getProperty("propertiesFilepath");
+			inStream = new FileInputStream(propertiesPath);
+		} catch (FileNotFoundException e2) {
+			System.err.println("Unable to find properties file... Set with -DpropertiesFilepath=/path/to/application.properties");
+		}
+		try {
+			prop.load(inStream);
+		} catch (IOException e1) {
+			System.err.println("Unable to find application.properties file");
+		}
+		
+		String servername = prop.getProperty("servername");
+		String portnumber = prop.getProperty("portnumber");
+		String username = prop.getProperty("username");
+		String password = prop.getProperty("password");
+		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			System.out.println("driver loaded");
@@ -29,16 +39,14 @@ public class DatabaseHelper {
 		}
 
 		String sid = "xe";
-		url = "jdbc:oracle:thin:@//" + servername + ":" + portnumber + "/" + sid;
+		String url = "jdbc:oracle:thin:@//" + servername + ":" + portnumber + "/" + sid;
 
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 		} catch (SQLException e) {
 			System.err.println("Failed to register driver.");
 		}
-	}
-
-	public Connection getConnection() throws SQLException {
+		
 		return DriverManager.getConnection(url, username, password);
 	}
 }

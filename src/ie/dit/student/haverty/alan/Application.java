@@ -3,7 +3,6 @@ package ie.dit.student.haverty.alan;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
@@ -12,16 +11,8 @@ import javax.swing.SwingConstants;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.GridLayout;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
-import javax.swing.BoxLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import java.awt.Component;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTabbedPane;
@@ -32,7 +23,6 @@ import com.jgoodies.forms.layout.FormSpecs;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
 
 public class Application {
 
@@ -180,9 +170,9 @@ public class Application {
 		tabbedPane.addTab("Administration", null, administrationPanel, null);
 		administrationPanel.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel = new JPanel();
-		administrationPanel.add(panel);
-		panel.setLayout(new FormLayout(new ColumnSpec[] {
+		JPanel administrationPanelFunctions = new JPanel();
+		administrationPanel.add(administrationPanelFunctions);
+		administrationPanelFunctions.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
@@ -215,27 +205,27 @@ public class Application {
 		
 		JLabel lblAddABook = new JLabel("Add a Book");
 		lblAddABook.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(lblAddABook, "1, 1, 2, 1");
+		administrationPanelFunctions.add(lblAddABook, "1, 1, 2, 1");
 		
 		JLabel lblBookName = new JLabel("Book name");
-		panel.add(lblBookName, "1, 3, right, default");
+		administrationPanelFunctions.add(lblBookName, "1, 3, right, default");
 		
 		textField_1 = new JTextField();
-		panel.add(textField_1, "2, 3, fill, default");
+		administrationPanelFunctions.add(textField_1, "2, 3, fill, default");
 		textField_1.setColumns(10);
 		
 		JLabel lblAuthorName = new JLabel("Author name");
-		panel.add(lblAuthorName, "1, 5, right, default");
+		administrationPanelFunctions.add(lblAuthorName, "1, 5, right, default");
 		
 		textField_2 = new JTextField();
-		panel.add(textField_2, "2, 5, fill, default");
+		administrationPanelFunctions.add(textField_2, "2, 5, fill, default");
 		textField_2.setColumns(10);
 		
 		JLabel lblPublisherName = new JLabel("Publisher name");
-		panel.add(lblPublisherName, "1, 7, right, default");
+		administrationPanelFunctions.add(lblPublisherName, "1, 7, right, default");
 		
 		textField_3 = new JTextField();
-		panel.add(textField_3, "2, 7, fill, default");
+		administrationPanelFunctions.add(textField_3, "2, 7, fill, default");
 		textField_3.setColumns(10);
 		
 		JButton btnNewButton_2 = new JButton("Submit book to the database");
@@ -243,45 +233,45 @@ public class Application {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		panel.add(btnNewButton_2, "1, 9, 2, 1");
+		administrationPanelFunctions.add(btnNewButton_2, "1, 9, 2, 1");
 		
 		JLabel lblSearchForA = new JLabel("Search for a book");
 		lblSearchForA.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(lblSearchForA, "1, 11, 2, 1");
+		administrationPanelFunctions.add(lblSearchForA, "1, 11, 2, 1");
 		
 		JLabel lblBookTitle = new JLabel("Book title");
-		panel.add(lblBookTitle, "1, 13, right, default");
+		administrationPanelFunctions.add(lblBookTitle, "1, 13, right, default");
 		
 		textField_4 = new JTextField();
-		panel.add(textField_4, "2, 13, fill, default");
+		administrationPanelFunctions.add(textField_4, "2, 13, fill, default");
 		textField_4.setColumns(10);
 		
 		JButton btnNewButton_3 = new JButton("Search");
-		panel.add(btnNewButton_3, "1, 15, 2, 1");
+		administrationPanelFunctions.add(btnNewButton_3, "1, 15, 2, 1");
 		
 		JLabel lblNewLabel = new JLabel("Add a book copy to this branch");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setVerticalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setEnabled(true);
-		panel.add(lblNewLabel, "1, 17, 2, 1");
+		administrationPanelFunctions.add(lblNewLabel, "1, 17, 2, 1");
 		
 		JLabel lblSelectABook = new JLabel("Select a book");
 		lblSelectABook.setHorizontalAlignment(SwingConstants.TRAILING);
-		panel.add(lblSelectABook, "1, 19, right, default");
+		administrationPanelFunctions.add(lblSelectABook, "1, 19, right, default");
 		
 		JComboBox comboBox_2 = new JComboBox();
-		panel.add(comboBox_2, "2, 19, fill, default");
+		administrationPanelFunctions.add(comboBox_2, "2, 19, fill, default");
 		
 		JButton btnAddACopy = new JButton("Add a copy to this branch");
-		panel.add(btnAddACopy, "1, 21, 2, 1");
+		administrationPanelFunctions.add(btnAddACopy, "1, 21, 2, 1");
 		
 		JLabel lblBranchInformation = new JLabel("Branch Information");
 		lblBranchInformation.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(lblBranchInformation, "1, 23, 2, 1");
+		administrationPanelFunctions.add(lblBranchInformation, "1, 23, 2, 1");
 		
 		JTextArea textArea_1 = new JTextArea();
 		textArea_1.setEditable(false);
-		panel.add(textArea_1, "1, 25, 2, 1, fill, fill");
+		administrationPanelFunctions.add(textArea_1, "1, 25, 2, 1, fill, fill");
 	}
 
 }
