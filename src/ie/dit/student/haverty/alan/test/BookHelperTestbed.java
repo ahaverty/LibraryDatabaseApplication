@@ -5,6 +5,7 @@ import java.util.List;
 
 import ie.dit.student.haverty.alan.Book;
 import ie.dit.student.haverty.alan.BookHelper;
+import ie.dit.student.haverty.alan.BookLoan;
 
 public class BookHelperTestbed {
 
@@ -12,8 +13,11 @@ public class BookHelperTestbed {
 		try {
 			List<Book> books = BookHelper.getAvailableBooks(1);
 			System.out.println(books);
+			
+			List<BookLoan> bookLoans = BookHelper.getPatronLoans(1);
+			System.out.println(bookLoans);
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

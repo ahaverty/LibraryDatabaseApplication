@@ -17,4 +17,8 @@ public class BookCopy extends Book {
 	public void setBranchId(int branchId) {
 		this.branchId = branchId;
 	}
+	@Override
+	public String toString() {
+		return "BookCopy [copyId=" + copyId + ", branchId=" + branchId + ", toString()=" + super.toString() + "]";
+	}
 }

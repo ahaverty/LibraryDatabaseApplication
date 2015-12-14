@@ -32,6 +32,11 @@ public class Book {
 	public void setPublisherName(String publisherName) {
 		this.publisherName = publisherName;
 	}
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", title=" + title + ", authorName=" + authorName + ", publisherName=" + publisherName
+				+ "]";
+	}
 	
 	
 	
