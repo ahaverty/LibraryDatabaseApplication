@@ -35,7 +35,6 @@ public class ApplicationView{
 	JTextField textFieldBookName;
 	JTextField textFieldAuthorName;
 	JTextField textFieldPublisherName;
-	JTextField textFieldBookTitle;
 	
 	JLabel lblPageTitle;
 	JButton btnMainMenu;
@@ -231,14 +230,7 @@ public class ApplicationView{
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"),
-				FormSpecs.DEFAULT_ROWSPEC,}));
+				RowSpec.decode("fill:default"),}));
 		
 		JLabel lblAddABook = new JLabel("Add a Book");
 		lblAddABook.setHorizontalAlignment(SwingConstants.CENTER);
@@ -272,44 +264,30 @@ public class ApplicationView{
 		});
 		administrationPanelFunctions.add(btnSubmitNewBook, "1, 9, 2, 1");
 		
-		JLabel lblSearchForBook = new JLabel("Search for a book");
-		lblSearchForBook.setHorizontalAlignment(SwingConstants.CENTER);
-		administrationPanelFunctions.add(lblSearchForBook, "1, 11, 2, 1");
-		
-		JLabel lblBookTitle = new JLabel("Book title");
-		administrationPanelFunctions.add(lblBookTitle, "1, 13, right, default");
-		
-		textFieldBookTitle = new JTextField();
-		administrationPanelFunctions.add(textFieldBookTitle, "2, 13, fill, default");
-		textFieldBookTitle.setColumns(10);
-		
-		JButton btnSearchBook = new JButton("Search");
-		administrationPanelFunctions.add(btnSearchBook, "1, 15, 2, 1");
-		
 		JLabel lblNewLabel = new JLabel("Add a book copy to this branch");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setVerticalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setEnabled(true);
-		administrationPanelFunctions.add(lblNewLabel, "1, 17, 2, 1");
+		administrationPanelFunctions.add(lblNewLabel, "1, 11, 2, 1");
 		
 		JLabel lblSelectABook = new JLabel("Select a book");
 		lblSelectABook.setHorizontalAlignment(SwingConstants.TRAILING);
-		administrationPanelFunctions.add(lblSelectABook, "1, 19, right, default");
+		administrationPanelFunctions.add(lblSelectABook, "1, 13, right, default");
 		
 		comboBoxBooks = new JComboBox<Book>();
 		comboBoxBooks.setRenderer(new BookRenderer());
-		administrationPanelFunctions.add(comboBoxBooks, "2, 19, fill, default");
+		administrationPanelFunctions.add(comboBoxBooks, "2, 13, fill, default");
 		
 		btnAddACopy = new JButton("Add a copy to this branch");
-		administrationPanelFunctions.add(btnAddACopy, "1, 21, 2, 1");
+		administrationPanelFunctions.add(btnAddACopy, "1, 15, 2, 1");
 		
 		JLabel lblBranchInformation = new JLabel("Branch Information");
 		lblBranchInformation.setHorizontalAlignment(SwingConstants.CENTER);
-		administrationPanelFunctions.add(lblBranchInformation, "1, 23, 2, 1");
+		administrationPanelFunctions.add(lblBranchInformation, "1, 17, 2, 1");
 		
 		textAreaBranchInformation = new JTextArea();
 		textAreaBranchInformation.setEditable(false);
-		administrationPanelFunctions.add(textAreaBranchInformation, "1, 25, 2, 1, fill, fill");
+		administrationPanelFunctions.add(textAreaBranchInformation, "1, 19, 2, 1, fill, bottom");
 	}
 	
 	/**
@@ -472,11 +450,11 @@ public class ApplicationView{
 	void resetAdministrationFields() {
 		textFieldAuthorName.setText("");
 		textFieldBookName.setText("");
-		textFieldBookTitle.setText("");
 		textFieldPublisherName.setText("");
 	}
 	
 	void resetBookList(){
+		comboBoxBooks.removeAllItems();
 		for(Book book : model.getAllBooks()) {
 			comboBoxBooks.addItem(book);
 		}
