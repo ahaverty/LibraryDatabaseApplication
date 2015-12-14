@@ -9,7 +9,7 @@ import org.joda.time.format.DateTimeFormatter;
 public class ApplicationModel {
 
 	private final static String initialTitle = "Select a Branch";
-	DateTimeFormatter dtfOut = DateTimeFormat.forPattern("MM/dd/yyyy");
+	DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd/MM/yyyy");
 	
 	private List<Branch> branches = new ArrayList<Branch>();
 	private List<Patron> patrons = new ArrayList<Patron>();;
@@ -83,7 +83,7 @@ public class ApplicationModel {
 	}
 
 	public String getPatronsDues() {
-		return Double.toString(selectedPatron.getUnpaidDues());
+		return Double.toString(selectedPatron.getCurrentUnpaidDues());
 	}
 
 	public String getPatronsLoanHistory() {
@@ -100,6 +100,14 @@ public class ApplicationModel {
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+	
+	public boolean checkoutBook(BookCopy bookCopy) {
+		return selectedPatron.checkoutBook(bookCopy.getCopyId());
+	}
+
+	public boolean returnBook(BookCopy bookCopy) {
+		return selectedPatron.returnBookCopy(bookCopy.getCopyId());
 	}
 	
 }

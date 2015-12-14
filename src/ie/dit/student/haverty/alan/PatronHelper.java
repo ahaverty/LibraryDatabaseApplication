@@ -11,7 +11,8 @@ public class PatronHelper {
 
 	private static String allPatrons = "SELECT * FROM borrowers";
 	private static String payPatronDues = "UPDATE borrowers SET unpaid_dues = 0 WHERE card_no = ?";
-
+	private static String getPatronDues = "SELECT unpaid_dues FROM borrowers WHERE card_no = ?";
+	
 	/**
 	 * Get all patrons from the library, set the patron objects to a specific
 	 * branch
@@ -52,6 +53,28 @@ public class PatronHelper {
 			System.err.println(e);
 		}
 		return rowsUpdated;
+	}
+	
+	/**
+	 * Get all patrons from the library, set the patron objects to a specific
+	 * branch
+	 * 
+	 * @param branchId
+	 * @return
+	 */
+	public static Double getDues(int patronId) {
+		try {
+			Connection connection = DatabaseHelper.getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(getPatronDues);
+			pstmt.setInt(1, patronId);
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			return rs.getDouble("unpaid_dues");
+		} catch (SQLException e) {
+			System.err.println("Error occured while retrieving all patrons.");
+			System.err.println(e);
+		}
+		return (double) -1;
 	}
 
 	private static List<Patron> convertResultSetToPatrons(ResultSet rs, int branchId) throws SQLException {

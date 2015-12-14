@@ -17,6 +17,9 @@ public class ApplicationController {
 		view.addSubmitNewBookListener(new InsertBookButtonListener());
 		view.addBookCopyListener(new AddBookCopyButtonListener());
 		view.addPatronSelectListener(new PatronSelectListener());
+		view.addCheckoutBookListener(new CheckoutBookListener());
+		view.addReturnBookListener(new ReturnBookListener());
+//		view.addPayFineListener(new PayFineListener());
 	}
 	
 	class MainMenuButtonListener implements ActionListener {
@@ -113,4 +116,31 @@ public class ApplicationController {
 	}
 	
 
+	class CheckoutBookListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			BookCopy bookCopy = (BookCopy) view.comboBoxCheckoutList.getSelectedItem();
+			boolean success = model.checkoutBook(bookCopy);
+			if (success) {
+				view.alert("Successfully checked out " + bookCopy.getTitle() + " from the " + model.getSelectedBranch().getName() + " branch.");
+			} else {
+				view.alert("Error checking out book copy, please try again...");
+			}
+			view.resetPatronFunctions();
+		}
+	}
+	
+	
+	class ReturnBookListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			BookCopy bookCopy = (BookCopy) view.comboBoxReturnList.getSelectedItem();
+			boolean success = model.returnBook(bookCopy);
+			if (success) {
+				view.alert("Successfully returned " + bookCopy.getTitle() + " to the " + model.getSelectedBranch().getName() + " branch.");
+			} else {
+				view.alert("Error returning book copy, please try again...");
+			}
+			view.resetPatronFunctions();
+		}
+	}
+	
 }

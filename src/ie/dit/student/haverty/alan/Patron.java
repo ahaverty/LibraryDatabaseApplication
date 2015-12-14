@@ -60,6 +60,10 @@ public class Patron {
 	void setBranchId(int branchId) {
 		this.branchId = branchId;
 	}
+	
+	public Double getCurrentUnpaidDues() {
+		return PatronHelper.getDues(id);
+	}
 
 	/**
 	 * Get the books currently on loan by this patron
@@ -110,7 +114,7 @@ public class Patron {
 	 * @return True if return successful, False otherwise
 	 */
 	public boolean returnBookCopy(int bookCopyId) {
-		return BookHelper.returnLoanedBook(id, bookCopyId) > 1 ? true : false;
+		return BookHelper.returnLoanedBook(id, bookCopyId) >= 1 ? true : false;
 	}
 	
 	/**

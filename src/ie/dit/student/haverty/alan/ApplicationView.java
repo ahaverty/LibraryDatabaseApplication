@@ -63,7 +63,7 @@ public class ApplicationView{
 	JButton btnCheckoutBook;
 	JComboBox<BookCopy> comboBoxCheckoutList;
 	JComboBox<BookCopy> comboBoxReturnList;
-	JButton btnSubmit;
+	JButton btnReturnBook;
 	JButton btnConfirmPayment;
 	JTextArea textArea;
 	
@@ -182,8 +182,8 @@ public class ApplicationView{
 		comboBoxReturnList.setRenderer(new BookRenderer());
 		panelPatronFunctions.add(comboBoxReturnList, "2, 2, fill, default");
 		
-		btnSubmit = new JButton("Submit");
-		panelPatronFunctions.add(btnSubmit, "3, 2");
+		btnReturnBook = new JButton("Submit");
+		panelPatronFunctions.add(btnReturnBook, "3, 2");
 		
 		JLabel lblPayFine = new JLabel("Pay Fine");
 		panelPatronFunctions.add(lblPayFine, "1, 3, right, default");
@@ -380,6 +380,18 @@ public class ApplicationView{
 	
 	void addPatronSelectListener(ActionListener listener) {
 		btnSelectPatron.addActionListener(listener);
+	}
+	
+	void addCheckoutBookListener(ActionListener listener) {
+		btnCheckoutBook.addActionListener(listener);
+	}
+	
+	void addReturnBookListener(ActionListener listener) {
+		btnReturnBook.addActionListener(listener);
+	}
+	
+	void addPayFineListener(ActionListener listener) {
+		btnConfirmPayment.addActionListener(listener);
 	}
 	
 	/**
