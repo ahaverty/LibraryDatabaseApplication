@@ -7,6 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Patron helper class
+ * @author Alan
+ *
+ */
 public class PatronHelper {
 
 	private static String allPatrons = "SELECT * FROM borrowers";

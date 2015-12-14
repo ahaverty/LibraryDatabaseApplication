@@ -3,6 +3,11 @@ package ie.dit.student.haverty.alan;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Controller class for the application
+ * @author Alan
+ *
+ */
 public class ApplicationController {
 	
 	private ApplicationView view;

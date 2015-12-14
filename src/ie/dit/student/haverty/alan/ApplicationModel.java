@@ -6,6 +6,11 @@ import java.util.List;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+/**
+ * Model class for the application
+ * @author Alan
+ *
+ */
 public class ApplicationModel {
 
 	private final static String initialTitle = "Select a Branch";

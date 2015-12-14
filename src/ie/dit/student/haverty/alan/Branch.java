@@ -1,5 +1,11 @@
 package ie.dit.student.haverty.alan;
 
+
+/**
+ * Branch pojo class
+ * @author Alan
+ *
+ */
 public class Branch {
 	
 	private int id;

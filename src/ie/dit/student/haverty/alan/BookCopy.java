@@ -1,5 +1,10 @@
 package ie.dit.student.haverty.alan;
 
+/**
+ * Book copy pojo class inheriting from the book class
+ * @author Alan
+ *
+ */
 public class BookCopy extends Book {
 
 	private int copyId;

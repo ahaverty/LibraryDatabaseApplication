@@ -1,5 +1,10 @@
 package ie.dit.student.haverty.alan;
 
+/**
+ * Main class for starting the mvc application
+ * @author Alan
+ *
+ */
 public class Application {
 
 	public static void main(String[] args) {

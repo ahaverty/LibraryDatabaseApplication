@@ -7,6 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Book helper class for database querying and statements
+ * @author Alan
+ *
+ */
 public class BookHelper {
 
 	private static String getAllBooks = "SELECT book_id, title, publisher_name, author_name FROM books JOIN publishers USING(publisher_id) JOIN authors USING(author_id)";

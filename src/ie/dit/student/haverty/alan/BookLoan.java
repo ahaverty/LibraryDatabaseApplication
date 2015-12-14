@@ -4,6 +4,11 @@ import java.util.Date;
 
 import org.joda.time.DateTime;
 
+/**
+ * Book loan pojo class
+ * @author Alan
+ *
+ */
 public class BookLoan extends BookCopy {
 
 	private int patronId;

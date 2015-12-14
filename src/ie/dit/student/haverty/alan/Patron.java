@@ -4,6 +4,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Patron pojo class (Borrower in the erd!)
+ * @author Alan
+ *
+ */
 public class Patron {
 
 	private int id;

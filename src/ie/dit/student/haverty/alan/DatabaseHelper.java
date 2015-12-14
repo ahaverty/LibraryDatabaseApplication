@@ -9,6 +9,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * Database helper class for static connections and accessing the properties file
+ * @author Alan
+ *
+ */
 public class DatabaseHelper {
 
 	public static Connection getConnection() throws SQLException {

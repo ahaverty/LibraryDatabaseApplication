@@ -28,6 +28,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 
+/**
+ * View class for the application made using java swing and windows builder
+ * @author Alan
+ *
+ */
 public class ApplicationView{
 
 	JFrame frame;
