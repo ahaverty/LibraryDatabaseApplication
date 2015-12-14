@@ -43,4 +43,8 @@ public class ApplicationModel {
 		return PatronHelper.getPatrons(selectedBranch);
 	}
 	
+	public List<Book> getAllBooks() {
+		return BookHelper.getBooks();
+	}
+	
 }

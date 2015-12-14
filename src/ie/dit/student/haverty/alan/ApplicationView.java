@@ -4,10 +4,16 @@ import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
+import javax.swing.JList;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -30,26 +36,18 @@ public class ApplicationView{
 	private JTextField textField_3;
 	private JTextField textField_4;
 	
-	private JComboBox<String> comboBranchNames = new JComboBox<String>();
-	private JComboBox<String> comboBoxPatrons = new JComboBox<String>();
+	JPanel rootCard;
+	JPanel patronPanel;
+	
+	private String branchSelectCard = "branchSelectCard";
+	private String tabbedCard = "tabbedCard";
+	
+	JButton btnSelectBranch = new JButton("Select Branch");
+	private JComboBox<Branch> comboBranchNames;
+	private JComboBox<String> comboBoxPatrons;
+	JComboBox<Book> comboBoxBooks;
 	
 	private ApplicationModel model;
-
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ApplicationView window = new ApplicationView();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the application.
@@ -63,6 +61,17 @@ public class ApplicationView{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+		/*
+		 * Set the look and feel of the swing application
+		 */
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e1) {
+			e1.printStackTrace();
+		}
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 461, 627);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,43 +87,43 @@ public class ApplicationView{
 		lblPageTitle.setFont(new Font("Tahoma", Font.BOLD, 18));
 		page_title.add(lblPageTitle);
 		
-		JPanel rootCard = new JPanel();
+		rootCard = new JPanel();
 		frame.getContentPane().add(rootCard, BorderLayout.CENTER);
 		rootCard.setLayout(new CardLayout(0, 0));
 		
 		JPanel branchSelect = new JPanel();
-		rootCard.add(branchSelect, "name_209982383061979");
+		rootCard.add(branchSelect, branchSelectCard);
 		branchSelect.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JLabel lblBranchSelectHelpText = new JLabel("Select a library branch:");
 		branchSelect.add(lblBranchSelectHelpText);
 		
-		
+		comboBranchNames = new JComboBox<Branch>();
+		comboBranchNames.setRenderer(new BranchRenderer());
 		setBranchNames();
 		branchSelect.add(comboBranchNames);
 		
-		JButton btnSelectBranch = new JButton("Select Branch");
 		btnSelectBranch.setAlignmentX(Component.CENTER_ALIGNMENT);
 		branchSelect.add(btnSelectBranch);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		rootCard.add(tabbedPane, "name_210836601530489");
+		rootCard.add(tabbedPane, tabbedCard);
 		
-		JPanel patronPanel = new JPanel();
+		patronPanel = new JPanel();
 		tabbedPane.addTab("Patrons", null, patronPanel, null);
 		patronPanel.setLayout(new CardLayout(0, 0));
 		
 		JPanel panelSelectPatron = new JPanel();
-		patronPanel.add(panelSelectPatron, "name_211393038128806");
+		patronPanel.add(panelSelectPatron, "patronSelect");
 		
-		
+		comboBoxPatrons = new JComboBox<String>();
 		panelSelectPatron.add(comboBoxPatrons);
 		
 		JButton btnNewButton = new JButton("Select Patron");
 		panelSelectPatron.add(btnNewButton);
 		
 		JPanel panelPatronFunctions = new JPanel();
-		patronPanel.add(panelPatronFunctions, "name_213285884191200");
+		patronPanel.add(panelPatronFunctions, "patronFunctions");
 		panelPatronFunctions.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("left:pref"),
 				ColumnSpec.decode("min:grow"),
@@ -262,8 +271,9 @@ public class ApplicationView{
 		lblSelectABook.setHorizontalAlignment(SwingConstants.TRAILING);
 		administrationPanelFunctions.add(lblSelectABook, "1, 19, right, default");
 		
-		JComboBox comboBox_2 = new JComboBox();
-		administrationPanelFunctions.add(comboBox_2, "2, 19, fill, default");
+		comboBoxBooks = new JComboBox();
+		comboBoxBooks.setRenderer(new BookRenderer());
+		administrationPanelFunctions.add(comboBoxBooks, "2, 19, fill, default");
 		
 		JButton btnAddACopy = new JButton("Add a copy to this branch");
 		administrationPanelFunctions.add(btnAddACopy, "1, 21, 2, 1");
@@ -278,13 +288,77 @@ public class ApplicationView{
 	}
 	
 	/**
+	 * Customer renderer to show title and author in combolist for books
+	 * @author Alan
+	 *
+	 */
+	public static class BookRenderer extends DefaultListCellRenderer {
+	    public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+	        Object item = value;
+	        if( item instanceof Book ) {
+	            item = ( ( Book ) item ).getTitle() + " by " + ( ( Book ) item ).getAuthorName();
+	        }
+	        return super.getListCellRendererComponent( list, item, index, isSelected, cellHasFocus);
+	    }
+	}
+	
+	public static class BranchRenderer extends DefaultListCellRenderer {
+	    public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+	        Object item = value;
+	        if( item instanceof Branch ) {
+	            item = ( ( Branch ) item ).getId() + " - " + ( ( Branch ) item ).getName();
+	        }
+	        return super.getListCellRendererComponent( list, item, index, isSelected, cellHasFocus);
+	    }
+	}
+	
+	/**
 	 * Set the list of branch names
 	 */
-	private void setBranchNames() {
+	void setBranchNames() {
 		comboBranchNames.removeAllItems();
 		
 		for(Branch branch : model.getBranches()) {
-			comboBranchNames.addItem(branch.getName());
+			comboBranchNames.addItem(branch);
+		}
+	}
+	
+	void addBranchSelectListener(ActionListener listener) {
+		btnSelectBranch.addActionListener(listener);
+    }
+	
+	Branch getSelectedBranch() {
+		return (Branch) comboBranchNames.getSelectedItem();
+	}
+	
+	void openBranchSelectCard() {
+		CardLayout rootCardLayout = (CardLayout) rootCard.getLayout();
+		rootCardLayout.show(rootCard, branchSelectCard);
+	}
+	
+	void openTabbedCard() {
+		CardLayout rootCardLayout = (CardLayout) rootCard.getLayout();
+		rootCardLayout.show(rootCard, tabbedCard);
+	}
+	
+	void resetTabbedPages() {
+		resetPatronList();
+		resetAdministrationFunctions();
+	}
+	
+	void resetPatronList() {
+		for(Patron patron : model.getPatrons()){
+			comboBoxPatrons.addItem(patron.getName());
+		}
+	}
+	
+	void resetAdministrationFunctions() {
+		resetBookList();
+	}
+	
+	void resetBookList(){
+		for(Book book : model.getAllBooks()) {
+			comboBoxBooks.addItem(book);
 		}
 	}
 
