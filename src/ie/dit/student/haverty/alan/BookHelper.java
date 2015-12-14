@@ -11,6 +11,8 @@ public class BookHelper {
 
 	private static String availableBookCopiesGrouped = "SELECT book_id, title, publisher_name, author_name FROM books JOIN publishers USING(publisher_id) JOIN authors USING(author_id) WHERE book_id in (SELECT book_id FROM book_copies WHERE book_copy_id NOT IN (SELECT book_copy_id FROM book_loans WHERE date_returned IS null) AND branch_id = ? ) ORDER BY book_id";
 	private static String patronLoans = "SELECT bl.card_no, bl.date_out, bl.date_due, bl.date_returned, bc.book_copy_id, bc.branch_id, b.book_id, b.title, p.publisher_name, a.author_name FROM book_loans bl JOIN book_copies bc ON bl.book_copy_id = bc.book_copy_id JOIN branches br ON br.branch_id = bc.branch_id JOIN books b ON b.book_id = bc.book_id JOIN authors a ON a.author_id = b.author_id JOIN publishers p ON p.publisher_id = b.publisher_id WHERE card_no = ?";
+	private static String returnLoanedBook = "UPDATE book_loans SET date_returned = SYSDATE WHERE book_copy_id = ? AND card_no = ?";
+	private static String loanBook = "INSERT INTO book_loans VALUES (?, ?, SYSDATE, SYSDATE + 14, null)";
 	
 	/**
 	 * Retrieve all books available to rent from a branch (ie. copies available
@@ -69,6 +71,42 @@ public class BookHelper {
 			}
 		}
 		return currentlyLoaned;
+	}
+	
+	public static int loanBook(int patronId, int bookCopyId) {
+		int rowsInserted = 0;
+		try {
+			Connection connection = DatabaseHelper.getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(loanBook);
+			pstmt.setInt(1, bookCopyId);
+			pstmt.setInt(2, patronId);
+			rowsInserted = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Error occured while inserting book loan record.");
+			System.err.println(e);
+		}
+		return rowsInserted;
+	}
+	
+	/**
+	 * Return a book copy for a patron by setting the return date to the current systime
+	 * @param patronId
+	 * @param bookCopyId
+	 * @return
+	 */
+	public static int returnLoanedBook(int patronId, int bookCopyId) {
+		int rowsUpdated = 0;
+		try {
+			Connection connection = DatabaseHelper.getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(returnLoanedBook);
+			pstmt.setInt(1, bookCopyId);
+			pstmt.setInt(2, patronId);
+			rowsUpdated = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Error occured while updating patron fine.");
+			System.err.println(e);
+		}
+		return rowsUpdated;
 	}
 	
 	/**

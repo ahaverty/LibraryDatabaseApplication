@@ -18,19 +18,20 @@ public class DatabaseHelper {
 			String propertiesPath = System.getProperty("propertiesFilepath");
 			inStream = new FileInputStream(propertiesPath);
 		} catch (FileNotFoundException e2) {
-			System.err.println("Unable to find properties file... Set with -DpropertiesFilepath=/path/to/application.properties");
+			System.err.println(
+					"Unable to find properties file... Set with -DpropertiesFilepath=/path/to/application.properties");
 		}
 		try {
 			prop.load(inStream);
 		} catch (IOException e1) {
 			System.err.println("Unable to find application.properties file");
 		}
-		
+
 		String servername = prop.getProperty("servername");
 		String portnumber = prop.getProperty("portnumber");
 		String username = prop.getProperty("username");
 		String password = prop.getProperty("password");
-		
+
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			System.out.println("driver loaded");
@@ -46,7 +47,7 @@ public class DatabaseHelper {
 		} catch (SQLException e) {
 			System.err.println("Failed to register driver.");
 		}
-		
+
 		return DriverManager.getConnection(url, username, password);
 	}
 }
