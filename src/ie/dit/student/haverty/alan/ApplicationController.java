@@ -19,7 +19,7 @@ public class ApplicationController {
 		view.addPatronSelectListener(new PatronSelectListener());
 		view.addCheckoutBookListener(new CheckoutBookListener());
 		view.addReturnBookListener(new ReturnBookListener());
-//		view.addPayFineListener(new PayFineListener());
+		view.addPayFineListener(new PayFineListener());
 	}
 	
 	class MainMenuButtonListener implements ActionListener {
@@ -138,6 +138,19 @@ public class ApplicationController {
 				view.alert("Successfully returned " + bookCopy.getTitle() + " to the " + model.getSelectedBranch().getName() + " branch.");
 			} else {
 				view.alert("Error returning book copy, please try again...");
+			}
+			view.resetPatronFunctions();
+		}
+	}
+	
+	
+	class PayFineListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			boolean success = model.clearFine();
+			if (success) {
+				view.alert("Successfully payed off dues!");
+			} else {
+				view.alert("Error paying fine, please try again...");
 			}
 			view.resetPatronFunctions();
 		}

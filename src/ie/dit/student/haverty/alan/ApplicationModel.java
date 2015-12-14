@@ -110,4 +110,8 @@ public class ApplicationModel {
 		return selectedPatron.returnBookCopy(bookCopy.getCopyId());
 	}
 	
+	public boolean clearFine() {
+		return selectedPatron.payDues();
+	}
+	
 }
