@@ -44,7 +44,7 @@ public class BranchHelper {
 			final Branch branch = new Branch();
 			branch.setId(rs.getInt("branch_id"));
 			branch.setAddress(rs.getString("branch_address"));
-			branch.setName(rs.getString("branch_address"));
+			branch.setName(rs.getString("branch_name"));
 			branches.add(branch);
 		}
 		return branches;

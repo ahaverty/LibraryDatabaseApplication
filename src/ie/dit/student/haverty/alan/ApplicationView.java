@@ -21,9 +21,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 
-public class ApplicationView extends JFrame{
+public class ApplicationView{
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
@@ -277,6 +277,9 @@ public class ApplicationView extends JFrame{
 		administrationPanelFunctions.add(textArea_1, "1, 25, 2, 1, fill, fill");
 	}
 	
+	/**
+	 * Set the list of branch names
+	 */
 	private void setBranchNames() {
 		comboBranchNames.removeAllItems();
 		

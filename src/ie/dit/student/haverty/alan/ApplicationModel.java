@@ -1,13 +1,14 @@
 package ie.dit.student.haverty.alan;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationModel {
 
 	private final static String initialTitle = "Select a Branch";
 	
-	private List<Branch> branches;
-	private List<Patron> patrons;
+	private List<Branch> branches = new ArrayList<Branch>();
+	private List<Patron> patrons = new ArrayList<Patron>();;
 	private int selectedBranch = -1;
 	private String pageTitle;
 	
