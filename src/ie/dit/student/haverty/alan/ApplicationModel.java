@@ -9,7 +9,7 @@ public class ApplicationModel {
 	
 	private List<Branch> branches = new ArrayList<Branch>();
 	private List<Patron> patrons = new ArrayList<Patron>();;
-	private int selectedBranch = -1;
+	private Branch selectedBranch;
 	private String pageTitle;
 	
 	ApplicationModel() {
@@ -35,16 +35,24 @@ public class ApplicationModel {
 		return branches;
 	}
 	
-	public void selectBranch(int branchId) {
-		selectedBranch = branchId;
+	public void selectBranch(Branch branch) {
+		selectedBranch = branch;
+	}
+	
+	public Branch getSelectedBranch() {
+		return selectedBranch;
 	}
 	
 	public List<Patron> getPatrons() {
-		return PatronHelper.getPatrons(selectedBranch);
+		return PatronHelper.getPatrons(selectedBranch.getId());
 	}
 	
 	public List<Book> getAllBooks() {
 		return BookHelper.getBooks();
+	}
+	
+	public boolean insertBook(String title, String author, String publisher) {
+		return BookHelper.insertNewBook(title, author, publisher);		
 	}
 	
 }

@@ -13,25 +13,59 @@ public class ApplicationController {
 		this.view = view;
 		
 		view.addBranchSelectListener(new BranchSelectListener());
-		
+		view.addMainMenuListener(new MainMenuButtonListener());
+		view.addSubmitNewBookListener(new InsertBookButtonListener());
+	}
+	
+	class MainMenuButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+
+			model.reset();
+			view.resetPageTitle();
+			view.openBranchSelectCard();
+			
+		}
 	}
 	
 	class BranchSelectListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
 			/*
-			 * Set the models chosen branch by comparing the selected branch name
+			 * Set the page title 
+			 */
+			model.setPageTitle("Branch Functions");
+			
+			/*
+			 * Set the models chosen branch for the admin functions and patron
 			 */
 			Branch selectedBranch = view.getSelectedBranch();
-			model.selectBranch(selectedBranch.getId());
+			model.selectBranch(selectedBranch);
 			
 			/*
 			 * Open the tabbed view
 			 */
-			view.openTabbedCard();
+
 			view.resetTabbedPages();
+			view.openTabbedCard();
 		}
 	}
+	
+	class InsertBookButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+
+			boolean success = model.insertBook(view.textFieldBookName.getText(), view.textFieldAuthorName.getText(), view.textFieldPublisherName.getText());
+			if (success) {
+				view.alert("Successfully inserted the new book!");
+			} else {
+				view.alert("Error inserting book, please try again...");
+			}
+			
+			view.resetAdministrationFunctions();
+			
+		}
+	}
+	
+	
 	
 
 }

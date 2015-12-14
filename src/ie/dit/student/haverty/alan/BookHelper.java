@@ -14,6 +14,7 @@ public class BookHelper {
 	private static String patronLoans = "SELECT bl.card_no, bl.date_out, bl.date_due, bl.date_returned, bc.book_copy_id, bc.branch_id, b.book_id, b.title, p.publisher_name, a.author_name FROM book_loans bl JOIN book_copies bc ON bl.book_copy_id = bc.book_copy_id JOIN branches br ON br.branch_id = bc.branch_id JOIN books b ON b.book_id = bc.book_id JOIN authors a ON a.author_id = b.author_id JOIN publishers p ON p.publisher_id = b.publisher_id WHERE card_no = ?";
 	private static String returnLoanedBook = "UPDATE book_loans SET date_returned = SYSDATE WHERE book_copy_id = ? AND card_no = ?";
 	private static String loanBook = "INSERT INTO book_loans VALUES (?, ?, SYSDATE, SYSDATE + 14, null)";
+	private static String insertNewBook = "BEGIN InsertNewBook(?, ?, ?); END;";
 	
 	/**
 	 * Get all books from library
@@ -93,6 +94,22 @@ public class BookHelper {
 		return currentlyLoaned;
 	}
 	
+	public static boolean insertNewBook(String title, String author, String publisher) {
+		try {
+			Connection connection = DatabaseHelper.getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(insertNewBook);
+			pstmt.setString(1, title);
+			pstmt.setString(2, author);
+			pstmt.setString(3, publisher);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Error occured while inserting new book.");
+			System.err.println(e);
+			return false;
+		}
+		return true;
+	}
+	
 	public static int loanBook(int patronId, int bookCopyId) {
 		int rowsInserted = 0;
 		try {
@@ -154,6 +171,7 @@ public class BookHelper {
 	 * @return
 	 * @throws SQLException
 	 */
+	@SuppressWarnings("unused")
 	private static List<BookCopy> convertResultSetToBookCopies(ResultSet rs) throws SQLException {
 		List<BookCopy> bookCopies = new ArrayList<BookCopy>();
 		while (rs.next()) {
@@ -193,5 +211,7 @@ public class BookHelper {
 		}
 		return bookLoans;
 	}
+
+	
 
 }

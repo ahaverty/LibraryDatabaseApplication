@@ -13,6 +13,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -30,11 +31,14 @@ import javax.swing.JTextArea;
 public class ApplicationView{
 
 	JFrame frame;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
+	JTextField textFieldFineAmount;
+	JTextField textFieldBookName;
+	JTextField textFieldAuthorName;
+	JTextField textFieldPublisherName;
+	JTextField textFieldBookTitle;
+	
+	JLabel lblPageTitle;
+	JButton btnMainMenu;
 	
 	JPanel rootCard;
 	JPanel patronPanel;
@@ -44,8 +48,12 @@ public class ApplicationView{
 	
 	JButton btnSelectBranch = new JButton("Select Branch");
 	private JComboBox<Branch> comboBranchNames;
-	private JComboBox<String> comboBoxPatrons;
+	private JComboBox<Patron> comboBoxPatrons;
 	JComboBox<Book> comboBoxBooks;
+	
+	JButton btnSubmitNewBook;
+	
+	JTextArea textAreaBranchInformation;
 	
 	private ApplicationModel model;
 
@@ -80,12 +88,16 @@ public class ApplicationView{
 		frame.getContentPane().add(header, BorderLayout.NORTH);
 		header.setLayout(new BorderLayout(0, 0));
 		
-		JPanel page_title = new JPanel();
-		header.add(page_title);
+		JPanel pageTitle = new JPanel();
+		header.add(pageTitle);
 		
-		JLabel lblPageTitle = new JLabel(model.getPageTitle());
+		lblPageTitle = new JLabel(model.getPageTitle());
 		lblPageTitle.setFont(new Font("Tahoma", Font.BOLD, 18));
-		page_title.add(lblPageTitle);
+		pageTitle.add(lblPageTitle);
+		
+		btnMainMenu = new JButton("Main Menu");
+		btnMainMenu.setVisible(false);
+		header.add(btnMainMenu, BorderLayout.WEST);
 		
 		rootCard = new JPanel();
 		frame.getContentPane().add(rootCard, BorderLayout.CENTER);
@@ -116,7 +128,8 @@ public class ApplicationView{
 		JPanel panelSelectPatron = new JPanel();
 		patronPanel.add(panelSelectPatron, "patronSelect");
 		
-		comboBoxPatrons = new JComboBox<String>();
+		comboBoxPatrons = new JComboBox<Patron>();
+		comboBoxPatrons.setRenderer(new PatronRenderer());
 		panelSelectPatron.add(comboBoxPatrons);
 		
 		JButton btnNewButton = new JButton("Select Patron");
@@ -139,21 +152,21 @@ public class ApplicationView{
 		JLabel lblCheckoutBook = new JLabel("Checkout Book");
 		panelPatronFunctions.add(lblCheckoutBook, "1, 1, right, default");
 		
-		JButton btnNewButton_1 = new JButton("Submit");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton btnCheckoutBook = new JButton("Submit");
+		btnCheckoutBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
 		
-		JComboBox comboBox = new JComboBox();
-		panelPatronFunctions.add(comboBox, "2, 1, fill, default");
-		panelPatronFunctions.add(btnNewButton_1, "3, 1");
+		JComboBox<Object> comboBoxCheckoutList = new JComboBox<Object>();
+		panelPatronFunctions.add(comboBoxCheckoutList, "2, 1, fill, default");
+		panelPatronFunctions.add(btnCheckoutBook, "3, 1");
 		
 		JLabel lblReturnBook = new JLabel("Return Book");
 		panelPatronFunctions.add(lblReturnBook, "1, 2, right, default");
 		
-		JComboBox comboBox_1 = new JComboBox();
-		panelPatronFunctions.add(comboBox_1, "2, 2, fill, default");
+		JComboBox<?> comboBoxReturnList = new JComboBox<Object>();
+		panelPatronFunctions.add(comboBoxReturnList, "2, 2, fill, default");
 		
 		JButton btnSubmit = new JButton("Submit");
 		panelPatronFunctions.add(btnSubmit, "3, 2");
@@ -161,10 +174,10 @@ public class ApplicationView{
 		JLabel lblPayFine = new JLabel("Pay Fine");
 		panelPatronFunctions.add(lblPayFine, "1, 3, right, default");
 		
-		textField = new JTextField();
-		textField.setEditable(false);
-		panelPatronFunctions.add(textField, "2, 3, fill, default");
-		textField.setColumns(10);
+		textFieldFineAmount = new JTextField();
+		textFieldFineAmount.setEditable(false);
+		panelPatronFunctions.add(textFieldFineAmount, "2, 3, fill, default");
+		textFieldFineAmount.setColumns(10);
 		
 		JButton btnConfirmPayment = new JButton("Confirm Payment");
 		panelPatronFunctions.add(btnConfirmPayment, "3, 3");
@@ -175,8 +188,6 @@ public class ApplicationView{
 		
 		JTextArea textArea = new JTextArea();
 		panelPatronFunctions.add(textArea, "1, 6, 3, 1, fill, fill");
-		
-		
 		
 		JPanel administrationPanel = new JPanel();
 		tabbedPane.addTab("Administration", null, administrationPanel, null);
@@ -222,44 +233,44 @@ public class ApplicationView{
 		JLabel lblBookName = new JLabel("Book name");
 		administrationPanelFunctions.add(lblBookName, "1, 3, right, default");
 		
-		textField_1 = new JTextField();
-		administrationPanelFunctions.add(textField_1, "2, 3, fill, default");
-		textField_1.setColumns(10);
+		textFieldBookName = new JTextField();
+		administrationPanelFunctions.add(textFieldBookName, "2, 3, fill, default");
+		textFieldBookName.setColumns(10);
 		
 		JLabel lblAuthorName = new JLabel("Author name");
 		administrationPanelFunctions.add(lblAuthorName, "1, 5, right, default");
 		
-		textField_2 = new JTextField();
-		administrationPanelFunctions.add(textField_2, "2, 5, fill, default");
-		textField_2.setColumns(10);
+		textFieldAuthorName = new JTextField();
+		administrationPanelFunctions.add(textFieldAuthorName, "2, 5, fill, default");
+		textFieldAuthorName.setColumns(10);
 		
 		JLabel lblPublisherName = new JLabel("Publisher name");
 		administrationPanelFunctions.add(lblPublisherName, "1, 7, right, default");
 		
-		textField_3 = new JTextField();
-		administrationPanelFunctions.add(textField_3, "2, 7, fill, default");
-		textField_3.setColumns(10);
+		textFieldPublisherName = new JTextField();
+		administrationPanelFunctions.add(textFieldPublisherName, "2, 7, fill, default");
+		textFieldPublisherName.setColumns(10);
 		
-		JButton btnNewButton_2 = new JButton("Submit book to the database");
-		btnNewButton_2.addActionListener(new ActionListener() {
+		btnSubmitNewBook = new JButton("Submit book to the database");
+		btnSubmitNewBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		administrationPanelFunctions.add(btnNewButton_2, "1, 9, 2, 1");
+		administrationPanelFunctions.add(btnSubmitNewBook, "1, 9, 2, 1");
 		
-		JLabel lblSearchForA = new JLabel("Search for a book");
-		lblSearchForA.setHorizontalAlignment(SwingConstants.CENTER);
-		administrationPanelFunctions.add(lblSearchForA, "1, 11, 2, 1");
+		JLabel lblSearchForBook = new JLabel("Search for a book");
+		lblSearchForBook.setHorizontalAlignment(SwingConstants.CENTER);
+		administrationPanelFunctions.add(lblSearchForBook, "1, 11, 2, 1");
 		
 		JLabel lblBookTitle = new JLabel("Book title");
 		administrationPanelFunctions.add(lblBookTitle, "1, 13, right, default");
 		
-		textField_4 = new JTextField();
-		administrationPanelFunctions.add(textField_4, "2, 13, fill, default");
-		textField_4.setColumns(10);
+		textFieldBookTitle = new JTextField();
+		administrationPanelFunctions.add(textFieldBookTitle, "2, 13, fill, default");
+		textFieldBookTitle.setColumns(10);
 		
-		JButton btnNewButton_3 = new JButton("Search");
-		administrationPanelFunctions.add(btnNewButton_3, "1, 15, 2, 1");
+		JButton btnSearchBook = new JButton("Search");
+		administrationPanelFunctions.add(btnSearchBook, "1, 15, 2, 1");
 		
 		JLabel lblNewLabel = new JLabel("Add a book copy to this branch");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -271,7 +282,7 @@ public class ApplicationView{
 		lblSelectABook.setHorizontalAlignment(SwingConstants.TRAILING);
 		administrationPanelFunctions.add(lblSelectABook, "1, 19, right, default");
 		
-		comboBoxBooks = new JComboBox();
+		comboBoxBooks = new JComboBox<Book>();
 		comboBoxBooks.setRenderer(new BookRenderer());
 		administrationPanelFunctions.add(comboBoxBooks, "2, 19, fill, default");
 		
@@ -282,18 +293,23 @@ public class ApplicationView{
 		lblBranchInformation.setHorizontalAlignment(SwingConstants.CENTER);
 		administrationPanelFunctions.add(lblBranchInformation, "1, 23, 2, 1");
 		
-		JTextArea textArea_1 = new JTextArea();
-		textArea_1.setEditable(false);
-		administrationPanelFunctions.add(textArea_1, "1, 25, 2, 1, fill, fill");
+		textAreaBranchInformation = new JTextArea();
+		textAreaBranchInformation.setEditable(false);
+		administrationPanelFunctions.add(textAreaBranchInformation, "1, 25, 2, 1, fill, fill");
 	}
 	
 	/**
-	 * Customer renderer to show title and author in combolist for books
+	 * Customer renderers to define how items are displayed in combolists
 	 * @author Alan
 	 *
 	 */
 	public static class BookRenderer extends DefaultListCellRenderer {
-	    public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+	    /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public Component getListCellRendererComponent( JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
 	        Object item = value;
 	        if( item instanceof Book ) {
 	            item = ( ( Book ) item ).getTitle() + " by " + ( ( Book ) item ).getAuthorName();
@@ -303,13 +319,57 @@ public class ApplicationView{
 	}
 	
 	public static class BranchRenderer extends DefaultListCellRenderer {
-	    public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+	    /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public Component getListCellRendererComponent( JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
 	        Object item = value;
 	        if( item instanceof Branch ) {
 	            item = ( ( Branch ) item ).getId() + " - " + ( ( Branch ) item ).getName();
 	        }
 	        return super.getListCellRendererComponent( list, item, index, isSelected, cellHasFocus);
 	    }
+	}
+	
+	public static class PatronRenderer extends DefaultListCellRenderer {
+	    /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public Component getListCellRendererComponent( JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+	        Object item = value;
+	        if( item instanceof Patron ) {
+	            item = "#" + ( ( Patron ) item ).getId() + " - " + ( ( Patron ) item ).getName();
+	        }
+	        return super.getListCellRendererComponent( list, item, index, isSelected, cellHasFocus);
+	    }
+	}
+	
+	void addBranchSelectListener(ActionListener listener) {
+		btnSelectBranch.addActionListener(listener);
+    }
+	
+	void addMainMenuListener(ActionListener listener) {
+		btnMainMenu.addActionListener(listener);
+	}
+	
+	void addSubmitNewBookListener(ActionListener listener) {
+		btnSubmitNewBook.addActionListener(listener);
+	}
+	
+	/**
+	 * Create a popup alert with the provided message and an 'ok' button
+	 * @param s
+	 */
+	public void alert(String s){
+	   JOptionPane.showMessageDialog(null, s);
+	}
+	
+	void resetPageTitle() {
+		lblPageTitle.setText(model.getPageTitle());
 	}
 	
 	/**
@@ -323,20 +383,20 @@ public class ApplicationView{
 		}
 	}
 	
-	void addBranchSelectListener(ActionListener listener) {
-		btnSelectBranch.addActionListener(listener);
-    }
+	
 	
 	Branch getSelectedBranch() {
 		return (Branch) comboBranchNames.getSelectedItem();
 	}
 	
 	void openBranchSelectCard() {
+		enableHomeButton(false);
 		CardLayout rootCardLayout = (CardLayout) rootCard.getLayout();
 		rootCardLayout.show(rootCard, branchSelectCard);
 	}
 	
 	void openTabbedCard() {
+		enableHomeButton(true);
 		CardLayout rootCardLayout = (CardLayout) rootCard.getLayout();
 		rootCardLayout.show(rootCard, tabbedCard);
 	}
@@ -344,22 +404,49 @@ public class ApplicationView{
 	void resetTabbedPages() {
 		resetPatronList();
 		resetAdministrationFunctions();
+		resetPageTitle();
 	}
 	
 	void resetPatronList() {
 		for(Patron patron : model.getPatrons()){
-			comboBoxPatrons.addItem(patron.getName());
+			comboBoxPatrons.addItem(patron);
 		}
 	}
 	
 	void resetAdministrationFunctions() {
+		resetAdministrationFields();
 		resetBookList();
+		resetBranchInformation();
+	}
+	
+	void resetAdministrationFields() {
+		textFieldAuthorName.setText("");
+		textFieldBookName.setText("");
+		textFieldBookTitle.setText("");
+		textFieldPublisherName.setText("");
 	}
 	
 	void resetBookList(){
 		for(Book book : model.getAllBooks()) {
 			comboBoxBooks.addItem(book);
 		}
+	}
+	
+	void resetBranchInformation() {
+		Branch selectedBranch = model.getSelectedBranch();
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("Branch ID: ");
+		sb.append(selectedBranch.getId());
+		sb.append("\n");
+		sb.append(selectedBranch.getName());
+		sb.append("\n");
+		sb.append(selectedBranch.getAddress());
+		textAreaBranchInformation.setText(sb.toString());
+	}
+	
+	void enableHomeButton(boolean enable) {
+		btnMainMenu.setVisible(enable);
 	}
 
 }

@@ -34,7 +34,6 @@ public class DatabaseHelper {
 
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			System.out.println("driver loaded");
 		} catch (ClassNotFoundException e) {
 			System.err.println("Could not load the driver");
 		}

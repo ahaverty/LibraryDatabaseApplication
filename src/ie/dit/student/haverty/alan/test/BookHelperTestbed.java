@@ -20,6 +20,8 @@ public class BookHelperTestbed {
 			List<BookLoan> bookCurrentlyLoaned = BookHelper.getPatronsCurrentlyLoanedBooks(1);
 			System.out.println(bookCurrentlyLoaned);
 			
+			System.out.println(BookHelper.insertNewBook("dsfsdf", "sdffsg", "sdfsgaf"));
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
