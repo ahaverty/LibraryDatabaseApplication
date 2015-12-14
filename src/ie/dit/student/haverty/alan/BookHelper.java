@@ -10,11 +10,12 @@ import java.util.List;
 public class BookHelper {
 
 	private static String getAllBooks = "SELECT book_id, title, publisher_name, author_name FROM books JOIN publishers USING(publisher_id) JOIN authors USING(author_id)";
-	private static String availableBookCopiesGrouped = "SELECT book_id, title, publisher_name, author_name FROM books JOIN publishers USING(publisher_id) JOIN authors USING(author_id) WHERE book_id in (SELECT book_id FROM book_copies WHERE book_copy_id NOT IN (SELECT book_copy_id FROM book_loans WHERE date_returned IS null) AND branch_id = ? ) ORDER BY book_id";
+	private static String availableBookCopiesGrouped = "SELECT book_id, MAX(book_copy_id) as book_copy_id, branch_id, title, publisher_name, author_name FROM book_copies JOIN books USING(book_id) JOIN publishers USING(publisher_id) JOIN authors USING(author_id) WHERE book_copy_id NOT in (SELECT book_copy_id FROM book_loans WHERE date_returned IS null) AND branch_id = ? GROUP BY (book_id, branch_id, title, publisher_name, author_name)";
 	private static String patronLoans = "SELECT bl.card_no, bl.date_out, bl.date_due, bl.date_returned, bc.book_copy_id, bc.branch_id, b.book_id, b.title, p.publisher_name, a.author_name FROM book_loans bl JOIN book_copies bc ON bl.book_copy_id = bc.book_copy_id JOIN branches br ON br.branch_id = bc.branch_id JOIN books b ON b.book_id = bc.book_id JOIN authors a ON a.author_id = b.author_id JOIN publishers p ON p.publisher_id = b.publisher_id WHERE card_no = ?";
 	private static String returnLoanedBook = "UPDATE book_loans SET date_returned = SYSDATE WHERE book_copy_id = ? AND card_no = ?";
 	private static String loanBook = "INSERT INTO book_loans VALUES (?, ?, SYSDATE, SYSDATE + 14, null)";
 	private static String insertNewBook = "BEGIN InsertNewBook(?, ?, ?); END;";
+	private static String addBookCopy = "INSERT INTO book_copies (branch_id, book_id) VALUES (?, ?)";
 	
 	/**
 	 * Get all books from library
@@ -43,20 +44,20 @@ public class BookHelper {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static List<Book> getAvailableBooks(int branchId) throws SQLException {
-		List<Book> books = new ArrayList<Book>();
+	public static List<BookCopy> getAvailableBooks(int branchId) throws SQLException {
+		List<BookCopy> bookCopies = new ArrayList<BookCopy>();
 
 		try {
 			Connection connection = DatabaseHelper.getConnection();
 			PreparedStatement pstmt = connection.prepareStatement(availableBookCopiesGrouped);
 			pstmt.setInt(1, branchId);
 			ResultSet rs = pstmt.executeQuery();
-			books = convertResultSetToBooks(rs);
+			bookCopies = convertResultSetToBookCopies(rs);
 		} catch(SQLException e) {
 			System.err.println("Error occured while selecting available books for branch.");
 			System.err.println(e);
 		}
-		return books;
+		return bookCopies;
 	}
 	
 	/**
@@ -86,7 +87,7 @@ public class BookHelper {
 	 */
 	public static List<BookLoan> getPatronsCurrentlyLoanedBooks(int patronId) {
 		List<BookLoan> currentlyLoaned = new ArrayList<BookLoan>();
-		for(BookLoan bookLoan : getPatronLoans(1)) {
+		for(BookLoan bookLoan : getPatronLoans(patronId)) {
 			if (!bookLoan.isReturned()) {
 				currentlyLoaned.add(bookLoan);
 			}
@@ -104,6 +105,21 @@ public class BookHelper {
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.err.println("Error occured while inserting new book.");
+			System.err.println(e);
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean addBookCopy(int branchId, int bookId) {
+		try {
+			Connection connection = DatabaseHelper.getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(addBookCopy);
+			pstmt.setInt(1, branchId);
+			pstmt.setInt(2, bookId);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Error occured while adding book copy to branch.");
 			System.err.println(e);
 			return false;
 		}
@@ -171,7 +187,6 @@ public class BookHelper {
 	 * @return
 	 * @throws SQLException
 	 */
-	@SuppressWarnings("unused")
 	private static List<BookCopy> convertResultSetToBookCopies(ResultSet rs) throws SQLException {
 		List<BookCopy> bookCopies = new ArrayList<BookCopy>();
 		while (rs.next()) {
@@ -211,6 +226,8 @@ public class BookHelper {
 		}
 		return bookLoans;
 	}
+
+	
 
 	
 

@@ -45,15 +45,27 @@ public class ApplicationView{
 	
 	private String branchSelectCard = "branchSelectCard";
 	private String tabbedCard = "tabbedCard";
+	private String patronSelect = "patronSelectCard";
+	private String patronFunctions = "patronFunctionsCard";
 	
 	JButton btnSelectBranch = new JButton("Select Branch");
-	private JComboBox<Branch> comboBranchNames;
-	private JComboBox<Patron> comboBoxPatrons;
+	JComboBox<Branch> comboBranchNames;
+	
+	JButton btnSelectPatron;
+	JComboBox<Patron> comboBoxPatrons;
 	JComboBox<Book> comboBoxBooks;
 	
 	JButton btnSubmitNewBook;
+	JButton btnAddACopy;
 	
 	JTextArea textAreaBranchInformation;
+	
+	JButton btnCheckoutBook;
+	JComboBox<BookCopy> comboBoxCheckoutList;
+	JComboBox<BookCopy> comboBoxReturnList;
+	JButton btnSubmit;
+	JButton btnConfirmPayment;
+	JTextArea textArea;
 	
 	private ApplicationModel model;
 
@@ -81,7 +93,7 @@ public class ApplicationView{
 		}
 		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 461, 627);
+		frame.setBounds(100, 100, 615, 628);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel header = new JPanel();
@@ -126,17 +138,17 @@ public class ApplicationView{
 		patronPanel.setLayout(new CardLayout(0, 0));
 		
 		JPanel panelSelectPatron = new JPanel();
-		patronPanel.add(panelSelectPatron, "patronSelect");
+		patronPanel.add(panelSelectPatron, patronSelect);
 		
 		comboBoxPatrons = new JComboBox<Patron>();
 		comboBoxPatrons.setRenderer(new PatronRenderer());
 		panelSelectPatron.add(comboBoxPatrons);
 		
-		JButton btnNewButton = new JButton("Select Patron");
-		panelSelectPatron.add(btnNewButton);
+		btnSelectPatron = new JButton("Select Patron");
+		panelSelectPatron.add(btnSelectPatron);
 		
 		JPanel panelPatronFunctions = new JPanel();
-		patronPanel.add(panelPatronFunctions, "patronFunctions");
+		patronPanel.add(panelPatronFunctions, patronFunctions);
 		panelPatronFunctions.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("left:pref"),
 				ColumnSpec.decode("min:grow"),
@@ -152,23 +164,25 @@ public class ApplicationView{
 		JLabel lblCheckoutBook = new JLabel("Checkout Book");
 		panelPatronFunctions.add(lblCheckoutBook, "1, 1, right, default");
 		
-		JButton btnCheckoutBook = new JButton("Submit");
+		btnCheckoutBook = new JButton("Submit");
 		btnCheckoutBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
 		
-		JComboBox<Object> comboBoxCheckoutList = new JComboBox<Object>();
+		comboBoxCheckoutList = new JComboBox<BookCopy>();
+		comboBoxCheckoutList.setRenderer(new BookRenderer());
 		panelPatronFunctions.add(comboBoxCheckoutList, "2, 1, fill, default");
 		panelPatronFunctions.add(btnCheckoutBook, "3, 1");
 		
 		JLabel lblReturnBook = new JLabel("Return Book");
 		panelPatronFunctions.add(lblReturnBook, "1, 2, right, default");
 		
-		JComboBox<?> comboBoxReturnList = new JComboBox<Object>();
+		comboBoxReturnList = new JComboBox<BookCopy>();
+		comboBoxReturnList.setRenderer(new BookRenderer());
 		panelPatronFunctions.add(comboBoxReturnList, "2, 2, fill, default");
 		
-		JButton btnSubmit = new JButton("Submit");
+		btnSubmit = new JButton("Submit");
 		panelPatronFunctions.add(btnSubmit, "3, 2");
 		
 		JLabel lblPayFine = new JLabel("Pay Fine");
@@ -179,14 +193,14 @@ public class ApplicationView{
 		panelPatronFunctions.add(textFieldFineAmount, "2, 3, fill, default");
 		textFieldFineAmount.setColumns(10);
 		
-		JButton btnConfirmPayment = new JButton("Confirm Payment");
+		btnConfirmPayment = new JButton("Confirm Payment");
 		panelPatronFunctions.add(btnConfirmPayment, "3, 3");
 		
 		JLabel lblLoanHistory = new JLabel("Loan history");
 		lblLoanHistory.setFont(new Font("Tahoma", Font.BOLD, 11));
 		panelPatronFunctions.add(lblLoanHistory, "1, 4, 3, 1, center, default");
 		
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		panelPatronFunctions.add(textArea, "1, 6, 3, 1, fill, fill");
 		
 		JPanel administrationPanel = new JPanel();
@@ -286,7 +300,7 @@ public class ApplicationView{
 		comboBoxBooks.setRenderer(new BookRenderer());
 		administrationPanelFunctions.add(comboBoxBooks, "2, 19, fill, default");
 		
-		JButton btnAddACopy = new JButton("Add a copy to this branch");
+		btnAddACopy = new JButton("Add a copy to this branch");
 		administrationPanelFunctions.add(btnAddACopy, "1, 21, 2, 1");
 		
 		JLabel lblBranchInformation = new JLabel("Branch Information");
@@ -311,7 +325,7 @@ public class ApplicationView{
 
 		public Component getListCellRendererComponent( JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
 	        Object item = value;
-	        if( item instanceof Book ) {
+	        if( item instanceof Book || item instanceof BookCopy  || item instanceof BookLoan) {
 	            item = ( ( Book ) item ).getTitle() + " by " + ( ( Book ) item ).getAuthorName();
 	        }
 	        return super.getListCellRendererComponent( list, item, index, isSelected, cellHasFocus);
@@ -360,6 +374,14 @@ public class ApplicationView{
 		btnSubmitNewBook.addActionListener(listener);
 	}
 	
+	void addBookCopyListener(ActionListener listener) {
+		btnAddACopy.addActionListener(listener);
+	}
+	
+	void addPatronSelectListener(ActionListener listener) {
+		btnSelectPatron.addActionListener(listener);
+	}
+	
 	/**
 	 * Create a popup alert with the provided message and an 'ok' button
 	 * @param s
@@ -401,6 +423,18 @@ public class ApplicationView{
 		rootCardLayout.show(rootCard, tabbedCard);
 	}
 	
+	void openPatronSelectCard() {
+		enableHomeButton(true);
+		CardLayout patronCardLayout = (CardLayout) patronPanel.getLayout();
+		patronCardLayout.show(patronPanel, patronSelect);
+	}
+	
+	void openPatronFunctionsCard() {
+		enableHomeButton(true);
+		CardLayout patronCardLayout = (CardLayout) patronPanel.getLayout();
+		patronCardLayout.show(patronPanel, patronFunctions);
+	}
+	
 	void resetTabbedPages() {
 		resetPatronList();
 		resetAdministrationFunctions();
@@ -408,6 +442,7 @@ public class ApplicationView{
 	}
 	
 	void resetPatronList() {
+		comboBoxPatrons.removeAllItems();
 		for(Patron patron : model.getPatrons()){
 			comboBoxPatrons.addItem(patron);
 		}
@@ -419,6 +454,9 @@ public class ApplicationView{
 		resetBranchInformation();
 	}
 	
+	/**
+	 * Reset the admin panel text fields to empty
+	 */
 	void resetAdministrationFields() {
 		textFieldAuthorName.setText("");
 		textFieldBookName.setText("");
@@ -447,6 +485,35 @@ public class ApplicationView{
 	
 	void enableHomeButton(boolean enable) {
 		btnMainMenu.setVisible(enable);
+	}
+	
+	void resetPatronFunctions() {
+		resetAvailableBooks();
+		resetReturnableBooks();
+		resetFine();
+		resetLoanHistory();
+	}
+	
+	void resetAvailableBooks() {
+		comboBoxCheckoutList.removeAllItems();
+		for (BookCopy bookCopy : model.getPatronsAvailableBookCopies()){
+			comboBoxCheckoutList.addItem(bookCopy);
+		}
+	}
+	
+	void resetReturnableBooks() {
+		comboBoxReturnList.removeAllItems();
+		for (BookLoan bookLoan : model.getPatronsReturnableBookCopies()) {
+			comboBoxReturnList.addItem(bookLoan);
+		}
+	}
+	
+	void resetFine() {
+		textFieldFineAmount.setText(model.getPatronsDues());
+	}
+	
+	void resetLoanHistory() {
+		textArea.setText(model.getPatronsLoanHistory());
 	}
 
 }

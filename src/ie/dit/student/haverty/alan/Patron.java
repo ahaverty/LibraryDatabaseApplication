@@ -85,8 +85,8 @@ public class Patron {
 	 * 
 	 * @return
 	 */
-	public List<Book> getBooksAvailable() {
-		List<Book> books = new ArrayList<Book>();
+	public List<BookCopy> getBooksAvailable() {
+		List<BookCopy> books = new ArrayList<BookCopy>();
 		try {
 			books = BookHelper.getAvailableBooks(branchId);
 		} catch (SQLException e) {
