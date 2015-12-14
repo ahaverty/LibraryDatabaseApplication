@@ -17,6 +17,9 @@ public class BookHelperTestbed {
 			List<BookLoan> bookLoans = BookHelper.getPatronLoans(1);
 			System.out.println(bookLoans);
 			
+			List<BookLoan> bookCurrentlyLoaned = BookHelper.getPatronsCurrentlyLoanedBooks(1);
+			System.out.println(bookCurrentlyLoaned);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

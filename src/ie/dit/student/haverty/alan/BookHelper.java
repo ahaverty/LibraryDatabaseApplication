@@ -37,7 +37,7 @@ public class BookHelper {
 	}
 	
 	/**
-	 * Retrieve the book copies that a patron currently has on loan
+	 * Retrieve all book copies that a patron has loaned
 	 * @param patronId
 	 * @return
 	 */
@@ -54,6 +54,21 @@ public class BookHelper {
 			System.err.println(e);
 		}
 		return bookLoans;
+	}
+	
+	/**
+	 * Returns all books currently on loan by a patron
+	 * @param patronId
+	 * @return
+	 */
+	public static List<BookLoan> getPatronsCurrentlyLoanedBooks(int patronId) {
+		List<BookLoan> currentlyLoaned = new ArrayList<BookLoan>();
+		for(BookLoan bookLoan : getPatronLoans(1)) {
+			if (!bookLoan.isReturned()) {
+				currentlyLoaned.add(bookLoan);
+			}
+		}
+		return currentlyLoaned;
 	}
 	
 	/**
