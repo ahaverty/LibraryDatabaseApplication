@@ -1,7 +1,5 @@
 package ie.dit.student.haverty.alan;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -14,7 +12,6 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import java.awt.Component;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTabbedPane;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -24,7 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 
-public class Application {
+public class ApplicationView extends JFrame{
 
 	private JFrame frame;
 	private JTextField textField;
@@ -32,27 +29,33 @@ public class Application {
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
+	
+	private JComboBox<String> comboBranchNames = new JComboBox<String>();
+	private JComboBox<String> comboBoxPatrons = new JComboBox<String>();
+	
+	private ApplicationModel model;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Application window = new Application();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					ApplicationView window = new ApplicationView();
+//					window.frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the application.
 	 */
-	public Application() {
+	public ApplicationView(ApplicationModel model) {
+		this.model = model;
 		initialize();
 	}
 
@@ -71,7 +74,7 @@ public class Application {
 		JPanel page_title = new JPanel();
 		header.add(page_title);
 		
-		JLabel lblPageTitle = new JLabel("Page Title");
+		JLabel lblPageTitle = new JLabel(model.getPageTitle());
 		lblPageTitle.setFont(new Font("Tahoma", Font.BOLD, 18));
 		page_title.add(lblPageTitle);
 		
@@ -86,8 +89,8 @@ public class Application {
 		JLabel lblBranchSelectHelpText = new JLabel("Select a library branch:");
 		branchSelect.add(lblBranchSelectHelpText);
 		
-		JComboBox comboBranchNames = new JComboBox();
-		comboBranchNames.setModel(new DefaultComboBoxModel(new String[] {"Bolton Street", "Kevin Street"}));
+		
+		setBranchNames();
 		branchSelect.add(comboBranchNames);
 		
 		JButton btnSelectBranch = new JButton("Select Branch");
@@ -104,7 +107,7 @@ public class Application {
 		JPanel panelSelectPatron = new JPanel();
 		patronPanel.add(panelSelectPatron, "name_211393038128806");
 		
-		JComboBox comboBoxPatrons = new JComboBox();
+		
 		panelSelectPatron.add(comboBoxPatrons);
 		
 		JButton btnNewButton = new JButton("Select Patron");
@@ -272,6 +275,14 @@ public class Application {
 		JTextArea textArea_1 = new JTextArea();
 		textArea_1.setEditable(false);
 		administrationPanelFunctions.add(textArea_1, "1, 25, 2, 1, fill, fill");
+	}
+	
+	private void setBranchNames() {
+		comboBranchNames.removeAllItems();
+		
+		for(Branch branch : model.getBranches()) {
+			comboBranchNames.addItem(branch.getName());
+		}
 	}
 
 }

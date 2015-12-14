@@ -14,10 +14,9 @@ public class BranchHelper {
 
 	/**
 	 * Returns all branches
-	 * @param branchId
 	 * @return
 	 */
-	public static List<Branch> getBranches(int branchId) {
+	public static List<Branch> getBranches() {
 		List<Branch> branches = new ArrayList<Branch>();
 
 		try {
